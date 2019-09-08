@@ -1,9 +1,9 @@
 # SFND 3D Object Tracking
-As part of this project following schematic is implemented. At the end TTC (Time to collision) based on LIDAR and CAMERA measurements are calculated.
+As part of this project modules in the following schematic are implemented.Result of this process is TTC (Time to collision) , it is calculated using LIDAR and CAMERA measurements.
 
 <img src="images/course_code_structure.png" width="779" height="414" />
 
-In this project, you the missing parts in the schematic will be implemented. To do this, you will complete four major tasks: 
+In this project, the missing parts in the schematic will be implemented. Following tasks detail the implementaions to be done: 
 1. Match 3D objects over time by using keypoint correspondences. 
 2. Compute the TTC based on Lidar measurements. 
 3. Compute the TTC based on Camera, to achieve this first keypoint matches were associated with regions of interest and then TTC was computed based on those matches. 
@@ -14,14 +14,14 @@ Following paragraphs detail more about how each of the above steps was realized.
 ## Match 3D Objects
 Function 'matchBoundingBoxes' in camFusion_Student.cpp implements a mechanism to identify unique box matches b/w previous and current frame using matched keypoints. This is achieved by following the below steps.
  - Loop through each of the matched keypoints, search in prev and curr frame for the boxes that contain these match points
- - For each matched keypoint, box ids are stored if only one box in prev and one box in curr frame was identified else the point is discarded
- - No of occurrences of unique prev box id , curr box id pairs is counted.
- - For a give prev box id select the pair(prev , curr box id) with maximum occurrence.
+ - For each matched keypoint, box ids are stored only if one box in prev and one box in curr frame was identified else the point is discarded
+ - After looping through all the match points no of occurrences of unique prev box id and curr box id pairs is counted.
+ - For a given prev box id select the pair(prev , curr box id) with maximum occurrence.
 
 ## Compute TTC LIDAR
 Function 'computeTTCLidar' in camFusion_Student.cpp computes the TTC based on the LIDAR Data points. Following steps were implemented for calculating TTC
  - Sort previous and current lidar points in ascending order based on x coordinates.
- - Loop through each of the sorted prev lidar points from beginning, find the point with smallest x that has atleast
+ - Loop through each of the sorted prev frame lidar points from beginning, find the point with smallest x that has atleast
    neigh_thold (100) points within 0.1 meters. Stop searching once such a point is found.
  - Loop through each of the sorted current lidar points from beginning, find the point with smallest x that has atleast
    neigh_thold (100) points within 0.1 meters. Stop searching once such a point is found.
@@ -31,21 +31,21 @@ Function 'computeTTCLidar' in camFusion_Student.cpp computes the TTC based on th
 As mentioned in the introduction CAMERA TTC calculation involves 2 steps. Following are the details 
 
 ### Cluster Keypoint Matches With ROI
-Function 'clusterKptMatchesWithROI' in camFusion_Student.cpp associates a given bounding box with the keypoints it contains. Following steps were followed to realize this.
+Function 'clusterKptMatchesWithROI' in camFusion_Student.cpp associates a given bounding box with all the keypoints that fall in it. Following steps were followed .
 - From kptMatches buffer , identify all the points that fall in the given box. Store such points in 'bBkptMatches'
-- Calculate the mean and std of distance of the points in 'bBkptMatches' buffer.
-- Add all the points in bBkptMatches that are with in +/- 2* std of mean to boundingBox.kptMatches. This removes outliers around 95% of the points would be left after this steps.
+- Calculate the mean and std of distance of all the points in 'bBkptMatches' buffer.
+- Add all the points in bBkptMatches that are with in +/- 2* std of mean to boundingBox.kptMatches. This removes outliers, around 95% of the points would be left after this steps.
 
 ### Comput TTC CAMERA
-Function 'computeTTCCamera' in camFusion_Student.cpp implements TTC calculation for camera. To calculate TTC distance of each of the matchpoints with other points is calculated and ratio of distance between prev, current frames are calculated and stored in a buffer. Median point of this buffer is used for calculating the TTC. 
+Function 'computeTTCCamera' in camFusion_Student.cpp implements TTC calculation for camera. To calculate TTC ,distance of each of the matchpoints with other points is calculated and ratio of distance between prev, current frames is calculated and stored in a buffer. Median point of this buffer is used for calculating the TTC. 
 
 ## Analysis
 
 ### LIDAR TTC Performance Analysis:
 To analyze the LIDAR TTC performance , TTC calculated manually was compared with the TTC calculated by the program. Following steps were followed
  #### Manual Calculation
- - 2D top view of the LIDAR points was drawn using show3DObjects function.Measurement lines were drawn across the top view image every 0.1 meters. 
- - Run the code for each image store the 2D top view LIDAR plot for futher analysis. 
+ - 2D top view of the LIDAR points was drawn using show3DObjects function.Measurement lines were drawn across the top view image at every 0.1 meters. 
+ - Run the code for each image, store the 2D top view LIDAR plot for futher analysis. 
  - Calculate the distance of the vehicle manually by counting how many lines are there between LIDAR Points and image base.
  - Calculate the TTC using the formula discussed in the course.
 
@@ -76,18 +76,18 @@ To analyze the LIDAR TTC performance , TTC calculated manually was compared with
  |19	|6.79|	8.4875|	8.30978|	0.17772|
 
  #### Analysis 
- In the above table there are serveral images where there is a huge difference between manual and automated calculated values. I took 2 images with maximum differences. showLidarImgOverlay function was modified to highlight curr (red) and prev (blue) LIDAR points that were used for TTC calculation and save the resultant image. I have compared the 2D plots and augmented camera images for the images with maximum difference following are the images.
+ In the above table there are serveral images where there is a huge difference between manual and automated calculation results. I took 2 images with maximum differences. showLidarImgOverlay function was modified to highlight curr (red) and prev (blue) LIDAR points that were used for TTC calculation and save the resultant image. I have compared the 2D plots and augmented camera images of the input images with maximum difference. Following are the images.
 
  <img src="output/LIDAR_Faulty_Results_Analysis/LIDAR_Faulty_Pic_1.png" width="779" height="414" />
 
  <img src="output/LIDAR_Faulty_Results_Analysis/LIDAR_Faulty_Pic_2.png" width="779" height="414" />
 
  As per my observation following might be the cause for the discrepancy
- - Selection of points is not accurate everytime. Instead of selecting the closest point sometimes i am choosing slightly farther point. This might be happening because of the logic used for outliers 
- - In TTC calculation LIDAR's inherent inaccuracies were considered.
+ - Selection of points is not accurate everytime. Instead of selecting the closest point sometimes program chooses slightly farther point. This might be happening because of the logic used for outliers. 
+ - In TTC calculation LIDAR's inherent inaccuracies were not considered.
 
 ### CAMERA TTC Performance Analysis:
-To compare the TTC calculation performance of different detector & descriptors i have analyzed the variation in the slope. Following are more details. 
+To compare the TTC calculation performance of different detector & descriptors i have analyzed the variation in the TTC slope. Following are more details. 
 - Modify code to store the TTC calculated by CAMERA in a file. Name the file based on selected image number , detector type and descriptor type.
 - Load the values for all the combinations into an excel. The same can be found in the path '/output/CAMERA_TTC_Performance_Analaysis.xlsx'.
 - Calculate the slope of TTC between two consecutive images
@@ -95,15 +95,17 @@ To compare the TTC calculation performance of different detector & descriptors i
 - Repeat this for all the detector , descriptor combinations. 
 - Identify the top 3 detector , descriptor combination with minimal slope stddev.
 
+This method does not compare each TTC point with the reference TTC but it compares the general trend. Here i do not have reference TTC values for CAMERA.
+
 #### Analysis
 
-Following picture show plots of TTC for different images calculated using different detector , descriptor combinations. This picture does not include TTC values of ORB Detector for all the descriptors as there were cases where output was NAN. 
+Following picture shows plots of TTC for different input images, TTC was calculated using different detector , descriptor combinations. This picture does not include TTC values of ORB Detector as with ORB Detector all the descriptors had NAN in output. 
 
  <img src="output/CAMERA_Performance_Analysis/CAMERA_TTC_Comparison_All_Combinations.png" width="779" height="414" />
 
-I choose this approach as manual TTC calculated using LIDAR 2D plots cannot be used and it was not insisted.
+I choose this approach as manually calculated TTC, using LIDAR 2D plots, cannot be used and it was not insisted.
 
-Following are top 3 detector , descriptors based on above method. 
+Following are top 3 detector , descriptors combinations based on above method. 
  - AZAKE, ORB 
  - FAST , SIFT 
  - SHITOMASI , BRIEF
@@ -147,3 +149,6 @@ Following picture shows the TTC performance of these three top performing method
 2. Make a build directory in the top level project directory: `mkdir build && cd build`
 3. Compile: `cmake .. && make`
 4. Run it: `./3D_object_tracking`.
+
+## Future Reference
+To compile and run the code YOLO model and input images should be taken from this repository https://github.com/udacity/SFND_3D_Object_Tracking
