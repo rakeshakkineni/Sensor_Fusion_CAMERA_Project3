@@ -43,44 +43,51 @@ Function 'computeTTCCamera' in camFusion_Student.cpp implements TTC calculation 
 
 ### LIDAR TTC Performance Analysis:
 To analyze the LIDAR TTC performance manually calculated TTC was compared with the program calculated value. Following steps were followed
-#### Manual Calculation
-- 2D top view of the LIDAR points was drawn using show3DObjects function.Measurement lines were drawn across the top view image every 0.1 meters. 
-- Run the code for each image store the 2D top view LIDAR plot for futher analysis. 
-- Calculate the distance of the vehicle manually by counting how many lines are there between LIDAR Points and image base.
-- Calculate the TTC using the formula discussed in the course.
+ #### Manual Calculation
+ - 2D top view of the LIDAR points was drawn using show3DObjects function.Measurement lines were drawn across the top view image every 0.1 meters. 
+ - Run the code for each image store the 2D top view LIDAR plot for futher analysis. 
+ - Calculate the distance of the vehicle manually by counting how many lines are there between LIDAR Points and image base.
+ - Calculate the TTC using the formula discussed in the course.
 
-#### TTC LIDAR Logging
-- Modify code to store the calculated TTC into a file for each image. 
+ #### TTC LIDAR Logging
+ - Modify code to store the calculated TTC into a file for each image. 
 
-#### Results 
-|Image Number	|	Manual Distance Measured (mts) |	TTC Manual (sec) |	TTC Calculated (sec) |	Diff (Manual vs Calc) |
-|-------------|--------------------------------|------------------|----------------------|-----------------------|
-|1	|7.95|  |  |			|
-|2	|7.9	|15.8	|12.9722	| 2.8278 |
-|3	|7.85|	15.7|	12.264|	3.436|
-|4	|7.8|	15.6|	13.9161	|1.6839|
-|5	|7.75|	15.5|	14.8865|	0.6135|
-|6	|7.65|	7.65|	12.1873|	-4.5373|
-|7	|7.6|	15.2|	9.49751|	5.70249|
-|8	|7.55|	15.1|	17.5697|	-2.4697|
-|9	|7.5|	15|	18.7875|	-3.7875|
-|10	|7.45|	14.9|	15.8894|	-0.9894|
-|11	|7.4|	14.8|	9.85736|	4.94264|
-|12	|7.34|	12.2333333333|	14.9877|	-2.7543666667|
-|13	|7.28|	12.1333333333|	10.1|	2.0333333333|
-|14	|7.2|	9|	9.22307|	-0.22307|
-|15	|7.12|	8.9|	10.9678|	-2.0678|
-|16	|7.03|	7.8111111111|	8.09422|	-0.2831088889|
-|17	|6.95|	8.6875|	8.81392|	-0.12642|
-|18	|6.87|	8.5875|	10.2926|	-1.7051|
-|19	|6.79|	8.4875|	8.30978|	0.17772|
+ #### Results 
+ |Image Number	|	Manual Distance Measured (mts) |	TTC Manual (sec) |	TTC Calculated (sec) |	Diff (Manual vs Calc) |
+ |-------------|--------------------------------|------------------|----------------------|-----------------------|
+ |1	|7.95|  |  |			|
+ |2	|7.9	|15.8	|12.9722	| 2.8278 |
+ |3	|7.85|	15.7|	12.264|	3.436|
+ |4	|7.8|	15.6|	13.9161	|1.6839|
+ |5	|7.75|	15.5|	14.8865|	0.6135|
+ |6	|7.65|	7.65|	12.1873|	-4.5373|
+ |7	|7.6|	15.2|	9.49751|	5.70249|
+ |8	|7.55|	15.1|	17.5697|	-2.4697|
+ |9	|7.5|	15|	18.7875|	-3.7875|
+ |10	|7.45|	14.9|	15.8894|	-0.9894|
+ |11	|7.4|	14.8|	9.85736|	4.94264|
+ |12	|7.34|	12.2333333333|	14.9877|	-2.7543666667|
+ |13	|7.28|	12.1333333333|	10.1|	2.0333333333|
+ |14	|7.2|	9|	9.22307|	-0.22307|
+ |15	|7.12|	8.9|	10.9678|	-2.0678|
+ |16	|7.03|	7.8111111111|	8.09422|	-0.2831088889|
+ |17	|6.95|	8.6875|	8.81392|	-0.12642|
+ |18	|6.87|	8.5875|	10.2926|	-1.7051|
+ |19	|6.79|	8.4875|	8.30978|	0.17772|
 
-#### Analysis 
-In the above table there are serveral images where there is a huge difference between manual and automated calculated values. I took 2 images with maximum differences. showLidarImgOverlay function was modified to highlight curr and prev LIDAR points that were used for TTC calculation and save the resultant image. I have compared the 2D plots and augmented camera images for the images with maximum difference following are the images.
+ #### Analysis 
+ In the above table there are serveral images where there is a huge difference between manual and automated calculated values. I took 2 images with maximum differences. showLidarImgOverlay function was modified to highlight curr (red) and prev (blue) LIDAR points that were used for TTC calculation and save the resultant image. I have compared the 2D plots and augmented camera images for the images with maximum difference following are the images.
 
-<img src="output/LIDAR_Faulty_Results_Analysis/LIDAR_Faulty_Pic_1.png" width="779" height="414" />
+ <img src="output/LIDAR_Faulty_Results_Analysis/LIDAR_Faulty_Pic_1.png" width="779" height="414" />
 
-<img src="output/LIDAR_Faulty_Results_Analysis/LIDAR_Faulty_Pic_2.png" width="779" height="414" />
+ <img src="output/LIDAR_Faulty_Results_Analysis/LIDAR_Faulty_Pic_2.png" width="779" height="414" />
+
+ As per my observation following might be the cause for the discrepancy
+ - Selection of points is not accurate everytime. Instead of selecting the closest point sometimes i am choosing slightly farther point. This might be happening because of the logic used for outliers 
+ - In TTC calculation LIDAR's inherent inaccuracies were considered.
+
+### CAMERA TTC Performance Analysis:
+
 
 ## Dependencies for Running Locally
 * cmake >= 2.8
