@@ -53,8 +53,9 @@ To analyze the LIDAR TTC performance manually calculated TTC was compared with t
 - Modify code to store the calculated TTC into a file for each image. 
 
 #### Results 
-Image Number		Manual Distance Measured (mts)	TTC Manual (sec)	TTC Calculated (sec)	Diff (Manual vs Calc)
-1	79.5	7.95			
+|Image Number	|	Manual Distance Measured (mts) |	TTC Manual (sec) |	TTC Calculated (sec) |	Diff (Manual vs Calc) |
+|-------------|--------------------------------|------------------|----------------------|-----------------------|
+|1	|79.5	|7.95|  |  |			
 2	79	7.9	15.8	12.9722	2.8278
 3	78.5	7.85	15.7	12.264	3.436
 4	78	7.8	15.6	13.9161	1.6839
