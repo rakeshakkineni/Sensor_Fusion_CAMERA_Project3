@@ -1,14 +1,45 @@
 # SFND 3D Object Tracking
-
-Welcome to the final project of the camera course. By completing all the lessons, you now have a solid understanding of keypoint detectors, descriptors, and methods to match them between successive images. Also, you know how to detect objects in an image using the YOLO deep-learning framework. And finally, you know how to associate regions in a camera image with Lidar points in 3D space. Let's take a look at our program schematic to see what we already have accomplished and what's still missing.
+As part of this project following schematic is implemented. At the end TTC (Time to collision) based on LIDAR and CAMERA measurements are calculated.
 
 <img src="images/course_code_structure.png" width="779" height="414" />
 
-In this final project, you will implement the missing parts in the schematic. To do this, you will complete four major tasks: 
-1. First, you will develop a way to match 3D objects over time by using keypoint correspondences. 
-2. Second, you will compute the TTC based on Lidar measurements. 
-3. You will then proceed to do the same using the camera, which requires to first associate keypoint matches to regions of interest and then to compute the TTC based on those matches. 
-4. And lastly, you will conduct various tests with the framework. Your goal is to identify the most suitable detector/descriptor combination for TTC estimation and also to search for problems that can lead to faulty measurements by the camera or Lidar sensor. In the last course of this Nanodegree, you will learn about the Kalman filter, which is a great way to combine the two independent TTC measurements into an improved version which is much more reliable than a single sensor alone can be. But before we think about such things, let us focus on your final project in the camera course. 
+In this project, you the missing parts in the schematic will be implemented. To do this, you will complete four major tasks: 
+1. Match 3D objects over time by using keypoint correspondences. 
+2. Compute the TTC based on Lidar measurements. 
+3. Compute the TTC based on Camera, to achieve this first keypoint matches were associated with regions of interest and then TTC was computed based on those matches. 
+4. Conducted various tests with the framework. Goal is to identify the most suitable detector/descriptor combination for TTC estimation and also to search for problems that can lead to faulty measurements by the camera or Lidar sensor. 
+
+Following paragraphs detail more about how each of the above steps was realized. 
+
+## Match 3D Objects
+Function 'matchBoundingBoxes' in camFusion_Student.cpp implements a mechanism to identify unique box matches b/w previous and current frame using matched keypoints. This is achieved by following the below steps.
+ - Loop through each of the matched keypoints, search in prev and curr frame for the boxes that contain these match points
+ - For each matched keypoint, box ids are stored if only one box in prev and one box in curr frame was identified else the point is discarded
+ - No of occurrences of unique prev box id , curr box id pairs is counted.
+ - For a give prev box id select the pair(prev , curr box id) with maximum occurrence.
+
+## Compute TTC LIDAR
+Function 'computeTTCLidar' in camFusion_Student.cpp computes the TTC based on the LIDAR Data points. Following steps were implemented for calculating TTC
+ - Sort previous and current lidar points in ascending order based on x coordinates.
+ - Loop through each of the sorted prev lidar points from beginning, find the point with smallest x that has atleast
+   neigh_thold (100) points within 0.1 meters. Stop searching once such a point is found.
+ - Loop through each of the sorted current lidar points from beginning, find the point with smallest x that has atleast
+   neigh_thold (100) points within 0.1 meters. Stop searching once such a point is found.
+ - Use the points identified in above two steps to calculate TTC.
+
+## Compute TTC CAMERA 
+As mentioned in the introduction CAMERA TTC calculation involves 2 steps. Following are the details 
+
+### Cluster Keypoint Matches With ROI
+Function 'clusterKptMatchesWithROI' in camFusion_Student.cpp associates a given bounding box with the keypoints it contains. Following steps were followed to realize this.
+- From kptMatches buffer , identify all the points that fall in the given box. Store such points in 'bBkptMatches'
+- Calculate the mean and std of distance of the points in 'bBkptMatches' buffer.
+- Add all the points in bBkptMatches that are with in +/- 2* std of mean to boundingBox.kptMatches. This removes outliers around 95% of the points would be left after this steps.
+
+### Comput TTC CAMERA
+Function 'computeTTCCamera' in camFusion_Student.cpp implements TTC calculation for camera. To calculate TTC distance of each of the matchpoints with other points is calculated and ratio of distance between prev, current frames are calculated and stored in a buffer. Median point of this buffer is used for calculating the TTC. 
+
+
 
 ## Dependencies for Running Locally
 * cmake >= 2.8
