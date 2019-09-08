@@ -75,6 +75,12 @@ To analyze the LIDAR TTC performance manually calculated TTC was compared with t
 |18	|6.87|	8.5875|	10.2926|	-1.7051|
 |19	|6.79|	8.4875|	8.30978|	0.17772|
 
+#### Analysis 
+In the above table there are serveral images where there is a huge difference between manual and automated calculated values. I took 2 images with maximum differences. showLidarImgOverlay function was modified to highlight curr and prev LIDAR points that were used for TTC calculation and save the resultant image. I have compared the 2D plots and augmented camera images for the images with maximum difference following are the images.
+
+<img src="output/LIDAR_Faulty_Results_Analysis/LIDAR_Faulty_Pic_1.png" width="779" height="414" />
+
+<img src="output/LIDAR_Faulty_Results_Analysis/LIDAR_Faulty_Pic_2.png" width="779" height="414" />
 
 ## Dependencies for Running Locally
 * cmake >= 2.8
