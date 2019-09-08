@@ -42,7 +42,7 @@ Function 'computeTTCCamera' in camFusion_Student.cpp implements TTC calculation 
 ## Analysis
 
 ### LIDAR TTC Performance Analysis:
-To analyze the LIDAR TTC performance manually calculated TTC was compared with the program calculated value. Following steps were followed
+To analyze the LIDAR TTC performance , TTC calculated manually was compared with the TTC calculated by the program. Following steps were followed
  #### Manual Calculation
  - 2D top view of the LIDAR points was drawn using show3DObjects function.Measurement lines were drawn across the top view image every 0.1 meters. 
  - Run the code for each image store the 2D top view LIDAR plot for futher analysis. 
@@ -87,7 +87,25 @@ To analyze the LIDAR TTC performance manually calculated TTC was compared with t
  - In TTC calculation LIDAR's inherent inaccuracies were considered.
 
 ### CAMERA TTC Performance Analysis:
+To compare the TTC calculation performance of different detector & descriptors i have analyzed the variation in the slope. Following are more details. 
+- Modify code to store the TTC calculated by CAMERA in a file. Name the file based on selected image number , detector type and descriptor type.
+- Load the values for all the combinations into an excel. The same can be found in the path '/output/CAMERA_TTC_Performance_Analaysis.xlsx'.
+- Calculate the slope of TTC between two consecutive images
+- Calculate mean and stddev of the slope.
+- Repeat this for all the detector , descriptor combinations. 
+- Identify the top 3 detector , descriptor combination with minimal slope stddev.
 
+Following picture show plots of TTC for different images calculated using different detector , descriptor combinations.
+
+
+I choose this approach as manual TTC calculated using LIDAR 2D plots cannot be used and it was not insisted.
+
+Following are top 3 detector , descriptors based on above method. 
+ - AZAKE, ORB 
+ - FAST , SIFT 
+ - SHITOMASI , BRIEF
+ 
+ 
 
 ## Dependencies for Running Locally
 * cmake >= 2.8
