@@ -95,6 +95,8 @@ To compare the TTC calculation performance of different detector & descriptors i
 - Repeat this for all the detector , descriptor combinations. 
 - Identify the top 3 detector , descriptor combination with minimal slope stddev.
 
+#### Analysis
+
 Following picture show plots of TTC for different images calculated using different detector , descriptor combinations. This picture does not include TTC values of ORB Detector for all the descriptors as there were cases where output was NAN. 
 
  <img src="output/CAMERA_Performance_Analysis/CAMERA_TTC_Comparison_All_Combinations.png" width="779" height="414" />
@@ -110,6 +112,16 @@ Following picture shows the TTC performance of these three top performing method
  <img src="output/CAMERA_Performance_Analysis/CAMERA_TTC_Comparison_Best_Combinations.png" width="779" height="414" />
  
  Excel document 'output/CAMERA_TTC_Performance_Analaysis.xlsx' has all the calculations. 
+ 
+ #### Fault Measurement Analysis
+ - In images 7 to 11 most of the detector , descriptor combinations produce erroneous results. This might be because of the way bounding box is fitted , in all these images right tail light is partially outside the bounding box. So even if there were keypoints from the the tail light they are getting removed. This might be causing wrong TTC calculations. Please see the below images. 
+  <img src="output/CAMERA_Faulty_Results_Analysis/DET_TYPE_AKAZE_DES_TYPE_ORB_0007.png" width="779" height="414" />
+  <img src="output/CAMERA_Faulty_Results_Analysis/DET_TYPE_AKAZE_DES_TYPE_ORB_0008.png" width="779" height="414" />
+  <img src="output/CAMERA_Faulty_Results_Analysis/DET_TYPE_AKAZE_DES_TYPE_ORB_0009.png" width="779" height="414" />
+  <img src="output/CAMERA_Faulty_Results_Analysis/DET_TYPE_AKAZE_DES_TYPE_ORB_0010.png" width="779" height="414" />
+  <img src="output/CAMERA_Faulty_Results_Analysis/DET_TYPE_AKAZE_DES_TYPE_ORB_0011.png" width="779" height="414" />
+ 
+ - ORB produces NAN for many images with BRIEF , FREAK , SIFT descriptors. This might be because of the combination but i am not certain. 
  
 
 ## Dependencies for Running Locally
