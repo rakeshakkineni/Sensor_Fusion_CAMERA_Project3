@@ -39,6 +39,40 @@ Function 'clusterKptMatchesWithROI' in camFusion_Student.cpp associates a given 
 ### Comput TTC CAMERA
 Function 'computeTTCCamera' in camFusion_Student.cpp implements TTC calculation for camera. To calculate TTC distance of each of the matchpoints with other points is calculated and ratio of distance between prev, current frames are calculated and stored in a buffer. Median point of this buffer is used for calculating the TTC. 
 
+## Analysis
+
+### LIDAR TTC Performance Analysis:
+To analyze the LIDAR TTC performance manually calculated TTC was compared with the program calculated value. Following steps were followed
+#### Manual Calculation
+- 2D top view of the LIDAR points was drawn using show3DObjects function.Measurement lines were drawn across the top view image every 0.1 meters. 
+- Run the code for each image store the 2D top view LIDAR plot for futher analysis. 
+- Calculate the distance of the vehicle manually by counting how many lines are there between LIDAR Points and image base.
+- Calculate the TTC using the formula discussed in the course.
+
+#### TTC LIDAR Logging
+- Modify code to store the calculated TTC into a file for each image. 
+
+#### Results 
+Image Number		Manual Distance Measured (mts)	TTC Manual (sec)	TTC Calculated (sec)	Diff (Manual vs Calc)
+1	79.5	7.95			
+2	79	7.9	15.8	12.9722	2.8278
+3	78.5	7.85	15.7	12.264	3.436
+4	78	7.8	15.6	13.9161	1.6839
+5	77.5	7.75	15.5	14.8865	0.6135
+6	76.5	7.65	7.65	12.1873	-4.5373
+7	76	7.6	15.2	9.49751	5.70249
+8	75.5	7.55	15.1	17.5697	-2.4697
+9	75	7.5	15	18.7875	-3.7875
+10	74.5	7.45	14.9	15.8894	-0.9894
+11	74	7.4	14.8	9.85736	4.94264
+12	73.4	7.34	12.2333333333	14.9877	-2.7543666667
+13	72.8	7.28	12.1333333333	10.1	2.0333333333
+14	72	7.2	9	9.22307	-0.22307
+15	71.2	7.12	8.9	10.9678	-2.0678
+16	70.3	7.03	7.8111111111	8.09422	-0.2831088889
+17	69.5	6.95	8.6875	8.81392	-0.12642
+18	68.7	6.87	8.5875	10.2926	-1.7051
+19	67.9	6.79	8.4875	8.30978	0.17772
 
 
 ## Dependencies for Running Locally
