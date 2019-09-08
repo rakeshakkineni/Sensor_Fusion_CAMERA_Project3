@@ -95,8 +95,9 @@ To compare the TTC calculation performance of different detector & descriptors i
 - Repeat this for all the detector , descriptor combinations. 
 - Identify the top 3 detector , descriptor combination with minimal slope stddev.
 
-Following picture show plots of TTC for different images calculated using different detector , descriptor combinations.
+Following picture show plots of TTC for different images calculated using different detector , descriptor combinations. This picture does not include TTC values of ORB Detector for all the descriptors as there were cases where output was NAN. 
 
+ <img src="output/CAMERA_Performance_Analysis/CAMERA_TTC_Comparison_All_Combinations.png" width="779" height="414" />
 
 I choose this approach as manual TTC calculated using LIDAR 2D plots cannot be used and it was not insisted.
 
@@ -105,6 +106,10 @@ Following are top 3 detector , descriptors based on above method.
  - FAST , SIFT 
  - SHITOMASI , BRIEF
  
+Following picture shows the TTC performance of these three top performing methods.
+ <img src="output/CAMERA_Performance_Analysis/CAMERA_TTC_Comparison_Best_Combinations.png" width="779" height="414" />
+ 
+ Excel document 'output/CAMERA_TTC_Performance_Analaysis.xlsx' has all the calculations. 
  
 
 ## Dependencies for Running Locally
